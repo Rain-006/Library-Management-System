@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.menu a {
+    margin-right: 15px;
+}
+.messages {
+    color: green;
+}
+img {
+    border: 1px solid #ddd;
+    padding: 4px;
+    background:white;
+}

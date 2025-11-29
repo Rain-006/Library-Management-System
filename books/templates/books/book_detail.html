@@ -1,0 +1,25 @@
+{% extends 'books/base.html' %}
+{% block content %}
+<h1>{{ book.title }}</h1>
+<p><strong>Автор:</strong> {{ book.author }}</p>
+<p><strong>Жанр:</strong> {{ book.genre }}</p>
+<p><strong>Год:</strong> {{ book.year }}</p>
+<p><strong>Возраст:</strong> {{ book.age_category }}</p>
+{% if book.cover %}
+  <img src="{{ book.cover.url }}" alt="cover" style="max-width:200px;">
+{% endif %}
+<p>{{ book.description|linebreaks }}</p>
+
+{% if user.is_authenticated %}
+  <a href="{% url 'books:download_pdf' book.pk %}">Скачать PDF</a> |
+  <a href="{% url 'books:export_book_pdf' book.pk %}">Экспорт в PDF (деталь)</a>
+  {% if book.owner == user %}
+    | <a href="{% url 'books:book_edit' book.pk %}">Редактировать</a>
+    | <a href="{% url 'books:book_delete' book.pk %}">Удалить</a>
+  {% endif %}
+{% else %}
+  <p>Авторизуйтесь, чтобы скачать книгу.</p>
+{% endif %}
+
+<p>Владелец: {{ book.owner.get_full_name|default:book.owner.username }}</p>
+{% endblock %}

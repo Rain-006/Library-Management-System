@@ -1,0 +1,60 @@
+{% extends 'books/base.html' %}
+{% block title %}Список книг{% endblock %}
+{% block content %}
+<style>
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.book {
+  text-decoration: none;
+  background-color: #c9a66b;
+  color: white;
+  display: flex;
+  align-items: center;
+  max-width: 1400px;
+  margin-bottom: 50px;
+}
+.text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0px 35px 0px 35px;
+}
+.text__description {
+  max-width: 1200px;
+}
+
+</style>
+<h1>Книги</h1>
+{% for book in books %}
+  <div class="container">
+    <a class="book" href="{% url 'books:book_detail' book.pk %}">
+      {% if book.cover %}
+      <img class="book__cover" src="{{ book.cover.url }}" alt="cover" style="height: 250px;">
+      {% endif %}
+      <div class="book__text text">
+        <div class="text__title">{{ book.title }}</div>
+        <div class="text__author">Автор: {{ book.author }}</div>
+        <div class="text__description">"{{ book.description }}"</div>
+      </div>
+    </a>
+    {% empty %}
+    <div>Книг пока нет.</div>
+  </div>
+{% endfor %}
+  
+  
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
+    {% endif %}
+    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Вперед</a>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endblock %}

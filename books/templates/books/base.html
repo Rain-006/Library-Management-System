@@ -1,0 +1,81 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Library{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+</head>
+<body>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  background-color: #662e1c;
+}
+.menu a {
+  margin: 0 15px 0 15px;
+  text-decoration: none;
+  color: #ebdcb2;
+}
+.menu a:hover {
+  transition: 0.5s;
+  text-shadow: 0 0 60px #ebdcb2;
+}
+.logout:hover {
+  color: red;
+}
+.messages {
+    color: green;
+}
+img {
+    border: 1px solid #ddd;
+    padding: 4px;
+    background:white;
+}
+
+</style>
+<header>
+  <div class="header">
+    <div class="menu">
+      <a href="{% url 'books:book_list' %}">Главная</a>
+      {% if user.is_authenticated %}
+      <div class="menu__content">
+        <a href="{% url 'books:book_add' %}">Добавить книгу</a>
+        <a href="{% url 'books:export_mybooks_pdf' %}">Экспорт моих книг в PDF</a>
+      </div>
+      <a class="logout" href="{% url 'books:logout' %}">Выйти</a>
+      {% else %}
+      <div class="notauthenticated">
+        <a href="{% url 'books:login' %}">Войти</a>
+        <a href="{% url 'books:register' %}">Регистрация</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main>
+  Добро Пожаловать, {{ user.first_name|default:user.username }}
+  {% if messages %}
+    <ul class="messages">
+      {% for m in messages %}
+        <li>{{ m }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <p>Library System — учебный проект</p>
+</footer>
+</body>
+</html>
