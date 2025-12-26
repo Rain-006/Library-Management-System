@@ -5,42 +5,114 @@
   <meta charset="utf-8">
   <title>{% block title %}Library{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <style>
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f4f1ea; /* Светлый бежевый фон для уютной атмосферы */
+  color: #333;
 }
+
 .menu {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100px;
-  background-color: #662e1c;
-}
-.menu a {
-  margin: 0 15px 0 15px;
-  text-decoration: none;
-  color: #ebdcb2;
-}
-.menu a:hover {
-  transition: 0.5s;
-  text-shadow: 0 0 60px #ebdcb2;
-}
-.logout:hover {
-  color: red;
-}
-.messages {
-    color: green;
-}
-img {
-    border: 1px solid #ddd;
-    padding: 4px;
-    background:white;
+  height: 80px; /* Уменьшили высоту для современного вида */
+  background-color: #662e1c; /* Темно-коричневый */
+  padding: 0 40px; /* Больше отступов по бокам */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень для глубины */
 }
 
+.menu a {
+  margin: 0 20px; /* Больше пространства между ссылками */
+  text-decoration: none;
+  color: #ebdcb2; /* Светлый бежевый */
+  font-weight: 700; /* Жирный шрифт для акцента */
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.menu a:hover {
+  color: #fff; /* Белый при наведении */
+  text-shadow: 0 0 10px #ebdcb2; /* Мягкое свечение */
+}
+
+.logout:hover {
+  color: #ff4d4d; /* Красный для выхода */
+}
+
+.messages {
+  list-style: none;
+  padding: 10px;
+  margin: 20px auto;
+  max-width: 800px;
+  background-color: #d4edda; /* Светло-зеленый фон */
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  color: #155724; /* Темно-зеленый текст */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+img {
+  border: 1px solid #ddd;
+  padding: 4px;
+  background: white;
+  border-radius: 8px; /* Закругленные углы */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для фото */
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Фиксированный хедер */
+}
+
+.menu__content, .notauthenticated {
+  display: flex;
+  align-items: center;
+}
+
+main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Тень для основного контента */
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #662e1c;
+  color: #ebdcb2;
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+  }
+  
+  .menu a {
+    margin: 10px 0;
+  }
+  
+  .menu__content, .notauthenticated {
+    flex-direction: column;
+  }
+}
 </style>
 <header>
   <div class="header">
@@ -50,6 +122,7 @@ img {
       <div class="menu__content">
         <a href="{% url 'books:book_add' %}">Добавить книгу</a>
         <a href="{% url 'books:export_mybooks_pdf' %}">Экспорт моих книг в PDF</a>
+        <a href="{% url 'books:my_books' %}">Мои книги</a>
       </div>
       <a class="logout" href="{% url 'books:logout' %}">Выйти</a>
       {% else %}
@@ -63,7 +136,6 @@ img {
 </header>
 
 <main>
-  Добро Пожаловать, {{ user.first_name|default:user.username }}
   {% if messages %}
     <ul class="messages">
       {% for m in messages %}

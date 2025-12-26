@@ -4,35 +4,120 @@
 <style>
 .container {
   display: flex;
-  align-items: center;
   flex-direction: column;
-}
-.book {
-  text-decoration: none;
-  background-color: #c9a66b;
-  color: white;
-  display: flex;
   align-items: center;
-  max-width: 1400px;
-  margin-bottom: 50px;
-}
-.text {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0px 35px 0px 35px;
-}
-.text__description {
   max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
+.book {
+  text-decoration: none;
+  background-color: #ebdcb2; /* Бежевый фон для карточки */
+  color: #333; /* Темный текст */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Тень для глубины */
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book:hover {
+  transform: translateY(-5px); /* Легкий подъем при наведении */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.book__cover {
+  height: 250px;
+  object-fit: cover; /* Чтобы обложка заполняла пространство */
+  border-right: 1px solid #ddd; /* Разделитель */
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px;
+  flex: 1;
+}
+
+.text__title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #662e1c; /* Темно-коричневый для заголовка */
+}
+
+.text__author {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.text__description {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+  max-width: 100%; /* Убрали фиксированную ширину для responsivity */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  font-size: 16px;
+}
+
+.pagination a {
+  text-decoration: none;
+  color: #662e1c;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+  background-color: #662e1c;
+  color: #ebdcb2;
+}
+
+.pagination span {
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .book {
+    flex-direction: column; /* Стек для мобильных */
+    text-align: center;
+  }
+  
+  .book__cover {
+    height: auto;
+    width: 100%;
+    max-height: 300px;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .text {
+    padding: 20px;
+  }
+}
 </style>
 <h1>Книги</h1>
 {% for book in books %}
   <div class="container">
     <a class="book" href="{% url 'books:book_detail' book.pk %}">
       {% if book.cover %}
-      <img class="book__cover" src="{{ book.cover.url }}" alt="cover" style="height: 250px;">
+      <img class="book__cover" src="{{ book.cover.url }}" alt="cover">
       {% endif %}
       <div class="book__text text">
         <div class="text__title">{{ book.title }}</div>
@@ -40,13 +125,13 @@
         <div class="text__description">"{{ book.description }}"</div>
       </div>
     </a>
-    {% empty %}
-    <div>Книг пока нет.</div>
   </div>
+{% empty %}
+  <div>Книг пока нет.</div>
 {% endfor %}
   
   
-  {% if is_paginated %}
+{% if is_paginated %}
   <div class="pagination">
     {% if page_obj.has_previous %}
     <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
@@ -56,5 +141,5 @@
     <a href="?page={{ page_obj.next_page_number }}">Вперед</a>
     {% endif %}
   </div>
-  {% endif %}
-  {% endblock %}
+{% endif %}
+{% endblock %}

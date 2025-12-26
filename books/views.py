@@ -170,3 +170,8 @@ def export_book_pdf(request, pk):
     buffer.seek(0)
     safe_title = ''.join(c for c in book.title if c.isalnum() or c in (' ', '_')).rstrip()
     return FileResponse(buffer, as_attachment=True, filename=f'{safe_title}.pdf', content_type='application/pdf')
+
+@login_required
+def my_books(request):
+    books = Book.objects.filter(owner=request.user)
+    return render(request, "books/my_books.html", {"books": books})

@@ -1,25 +1,106 @@
 {% extends 'books/base.html' %}
 {% block content %}
-<h1>{{ book.title }}</h1>
-<p><strong>Автор:</strong> {{ book.author }}</p>
-<p><strong>Жанр:</strong> {{ book.genre }}</p>
-<p><strong>Год:</strong> {{ book.year }}</p>
-<p><strong>Возраст:</strong> {{ book.age_category }}</p>
-{% if book.cover %}
-  <img src="{{ book.cover.url }}" alt="cover" style="max-width:200px;">
-{% endif %}
-<p>{{ book.description|linebreaks }}</p>
+<div class="book-detail-container d-flex justify-content-center my-5">
+    <div class="book-card card shadow-lg p-4">
+        {% if book.cover %}
+            <div class="text-center mb-4">
+                <img src="{{ book.cover.url }}" alt="Обложка книги {{ book.title }}" class="book-cover img-fluid rounded">
+            </div>
+        {% endif %}
 
-{% if user.is_authenticated %}
-  <a href="{% url 'books:download_pdf' book.pk %}">Скачать PDF</a> |
-  <a href="{% url 'books:export_book_pdf' book.pk %}">Экспорт в PDF (деталь)</a>
-  {% if book.owner == user %}
-    | <a href="{% url 'books:book_edit' book.pk %}">Редактировать</a>
-    | <a href="{% url 'books:book_delete' book.pk %}">Удалить</a>
-  {% endif %}
-{% else %}
-  <p>Авторизуйтесь, чтобы скачать книгу.</p>
-{% endif %}
+        <h1 class="book-title text-center mb-4">{{ book.title }}</h1>
 
-<p>Владелец: {{ book.owner.get_full_name|default:book.owner.username }}</p>
+        <div class="book-info mb-4">
+            <p class="info-item"><strong>Автор:</strong> {{ book.author }}</p>
+            <p class="info-item"><strong>Жанр:</strong> {{ book.genre }}</p>
+            <p class="info-item"><strong>Год:</strong> {{ book.year }}</p>
+            <p class="info-item"><strong>Возраст:</strong> {{ book.age_category }}</p>
+        </div>
+
+        <div class="book-description mb-4">
+            {{ book.description|linebreaks }}
+        </div>
+
+        <div class="book-owner text-muted text-center mb-4">
+            Владелец: {{ book.owner.get_full_name|default:book.owner.username }}
+        </div>
+
+        {% if user.is_authenticated %}
+            <div class="book-actions text-center">
+                <a href="{% url 'books:download_pdf' book.pk %}" class="btn btn-primary me-3">Скачать PDF</a>
+                <a href="{% url 'books:export_book_pdf' book.pk %}" class="btn btn-secondary me-3">Экспорт в PDF (деталь)</a>
+                {% if book.owner == user %}
+                    <a href="{% url 'books:book_edit' book.pk %}" class="btn btn-warning me-3">Редактировать</a>
+                    <a href="{% url 'books:book_delete' book.pk %}" class="btn btn-danger">Удалить</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="text-center alert alert-info">
+                Авторизуйтесь, чтобы скачать книгу.
+            </div>
+        {% endif %}
+    </div>
+</div>
+<style>
+  .book-detail-container {
+    min-height: 80vh;
+}
+
+.book-card {
+    max-width: 800px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+
+.book-cover {
+    max-height: 400px;
+    object-fit: contain;
+    border: 1px solid #eee;
+}
+
+.book-title {
+    font-size: 2.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.book-info .info-item {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    color: #555;
+}
+
+.book-info .info-item strong {
+    color: #222;
+    min-width: 100px;
+    display: inline-block;
+}
+
+.book-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-left: 4px solid #007bff;
+    border-radius: 8px;
+}
+
+.book-actions .btn {
+    min-width: 160px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.05rem;
+}
+.book-actions a {
+    text-decoration: none;
+    color: black;
+}
+
+.book-owner {
+    font-style: italic;
+    font-size: 1rem;
+    margin: 20px 0 35px 0;
+}
+</style>
 {% endblock %}

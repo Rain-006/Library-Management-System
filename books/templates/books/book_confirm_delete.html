@@ -1,10 +1,71 @@
 {% extends 'books/base.html' %}
 {% block content %}
-<h1>Подтвердите удаление</h1>
-<p>Вы действительно хотите удалить книгу "{{ book.title }}"?</p>
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">Удалить</button>
-  <a href="{% url 'books:book_detail' book.pk %}">Отмена</a>
-</form>
+<div class="delete-confirm-container">
+    <h1 class="delete-confirm-title">Подтвердите удаление</h1>
+    <p class="delete-confirm-text">Вы действительно хотите удалить книгу "{{ book.title }}"?</p>
+    <form method="post" class="delete-confirm-form">
+        {% csrf_token %}
+        <button type="submit" class="delete-confirm-button">Удалить</button>
+        <a href="{% url 'books:book_detail' book.pk %}" class="delete-cancel-link">Отмена</a>
+    </form>
+</div>
+<style>
+  .delete-confirm-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.delete-confirm-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #662e1c;
+}
+
+.delete-confirm-text {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.delete-confirm-form {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.delete-confirm-button {
+    padding: 12px 24px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-confirm-button:hover {
+    background-color: #cc0000;
+}
+
+.delete-cancel-link {
+    padding: 12px 24px;
+    background-color: #ddd;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-cancel-link:hover {
+    background-color: #bbb;
+}
+</style>
 {% endblock %}

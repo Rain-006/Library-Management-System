@@ -1,0 +1,80 @@
+{% extends 'books/base.html' %}
+{% block content %}
+<h2 class="my-books-title">Мои книги</h2>
+{% for book in books %}
+    <div class="my-book-item">
+        <h3 class="my-book-title">{{ book.title }}</h3>
+        <p class="my-book-author">{{ book.author }}</p>
+        <img src="{{ book.cover.url }}" alt="Обложка книги" class="my-book-cover">
+        <a href="{% url 'books:download_pdf' book.pk %}" class="my-book-download">Скачать PDF</a>
+    </div>
+{% empty %}
+    <p class="my-books-empty">Вы ещё не добавили ни одной книги.</p>
+<style>
+.my-books-title {
+    font-size: 28px;
+    text-align: center;
+    color: #662e1c;
+    margin-bottom: 30px;
+}
+
+.my-book-item {
+    display: flex;
+    align-items: center;
+    background-color: #ebdcb2;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.my-book-item:hover {
+    transform: translateY(-5px);
+}
+
+.my-book-title {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.my-book-author {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.my-book-cover {
+    width: 120px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.my-book-download {
+    padding: 10px 20px;
+    background-color: #662e1c;
+    color: #ebdcb2;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.my-book-download:hover {
+    background-color: #4d2214;
+}
+
+.my-books-empty {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+}
+</style>
+{% endfor %}
+{% endblock %}
